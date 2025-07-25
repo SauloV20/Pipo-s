@@ -1,0 +1,101 @@
+
+:root {
+  --primary-color: #f3e0c7;
+  --secondary-color: #3a2d1d;
+  --accent-color: #8b6b4f;
+  --font-family: 'Roboto Slab', serif;
+}
+
+body {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  font-family: var(--font-family);
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.filters {
+  text-align: center;
+  margin: 2rem;
+}
+
+.filters select,
+.filters button {
+  background-color: #fff;
+  border: 2px solid var(--accent-color);
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem 1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  font-family: var(--font-family);
+  color: var(--secondary-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filters button {
+  background-color: var(--accent-color);
+  color: #fff;
+}
+
+.filters button:hover {
+  background-color: var(--secondary-color);
+}
+
+.product-card {
+  background-color: #fff;
+  border: 2px solid var(--secondary-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1rem;
+  width: 250px;
+  text-align: center;
+  box-shadow: 4px 4px 0 var(--secondary-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 6px 6px 0 var(--accent-color);
+}
+
+.product-card img {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.product-card h3 {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  color: var(--secondary-color);
+}
+
+.product-card p {
+  font-size: 1rem;
+  color: var(--accent-color);
+}
+
+footer {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  text-align: center;
+  padding: 2rem;
+  margin-top: 3rem;
+  border-top: 4px solid var(--accent-color);
+}

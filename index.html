@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pipo's</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>PM Pipo's</h1>
+  </header>
+
+  <section class="filters">
+    <select id="marcaFilter">
+      <option value="">Marca</option>
+      <option value="Nike">Nike</option>
+      <option value="Adidas">Adidas</option>
+      <option value="Puma">Puma</option>
+    </select>
+
+    <select id="tamanhoFilter">
+      <option value="">Tamanho</option>
+      <option value="30">30</option>
+      <option value="38">38</option>
+      <option value="42">42</option>
+    </select>
+
+    <select id="generoFilter">
+      <option value="">Gênero</option>
+      <option value="masculino">Masculino</option>
+      <option value="feminino">Feminino</option>
+      <option value="infantil">Infantil</option>
+    </select>
+
+    <button id="aplicarFiltros">Filtrar</button>
+  </section>
+
+  <main id="catalogo" style="display: flex; flex-wrap: wrap; justify-content: center;"></main>
+
+  <footer>
+    <p>&copy; 2025 Pipo's Tênis - Todos os direitos reservados.</p>
+  </footer>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
