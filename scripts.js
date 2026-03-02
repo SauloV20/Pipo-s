@@ -464,7 +464,7 @@ function limparFiltros() {
 }
 
 // Carrinho
-const WHATSAPP_NUM = "5524992938796";
+const WHATSAPP_NUM = "55999999999999";
 let carrinho = [];
 
 function abrirCarrinho() {
