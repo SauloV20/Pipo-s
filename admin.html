@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Pipo's</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+  <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+
+<div class="admin-container">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h1>Pipo's Admin</h1>
+      <button id="btnLogout" class="btn-logout">Sair</button>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-btn ativo" data-tab="produtos">
+        <span>📦</span> Produtos
+      </button>
+      <button class="nav-btn" data-tab="relatorio">
+        <span>📊</span> Relatório
+      </button>
+      <button class="nav-btn" data-tab="backup">
+        <span>💾</span> Backup
+      </button>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <!-- TAB: PRODUTOS -->
+    <section id="tab-produtos" class="tab-content ativo">
+      <div class="header-section">
+        <h2>Gerenciar Produtos</h2>
+        <button id="btnNovoP roduto" class="btn-primario">+ Novo Produto</button>
+      </div>
+
+      <!-- Formulário de Produto -->
+      <div id="formProduto" class="formulario-produto" style="display: none;">
+        <h3 id="tituloFormulario">Novo Produto</h3>
+        <form id="produto-form">
+          <div class="form-grid">
+            <div class="form-grupo">
+              <label>Nome do Produto *</label>
+              <input type="text" id="nome" required placeholder="Ex: Nike Air Force">
+            </div>
+            <div class="form-grupo">
+              <label>Marca *</label>
+              <select id="marca" required>
+                <option value="">Selecione a marca</option>
+                <option value="Nike">Nike</option>
+                <option value="Adidas">Adidas</option>
+                <option value="Puma">Puma</option>
+                <option value="DC">DC</option>
+                <option value="Asics">Asics</option>
+                <option value="New Balance">New Balance</option>
+                <option value="Mizuno">Mizuno</option>
+                <option value="Kenner">Kenner</option>
+                <option value="OUS">OUS</option>
+                <option value="On Cloud">On Cloud</option>
+                <option value="Schutz">Schutz</option>
+                <option value="Vert">Vert</option>
+                <option value="Outra">Outra</option>
+              </select>
+            </div>
+            <div class="form-grupo">
+              <label>Preço (R$) *</label>
+              <input type="number" id="preco" required min="0" step="0.01" placeholder="399.90">
+            </div>
+            <div class="form-grupo">
+              <label>Descrição *</label>
+              <textarea id="descricao" required placeholder="Descreva o produto..."></textarea>
+            </div>
+          </div>
+
+          <div class="form-grupo">
+            <label>Tamanhos Disponíveis *</label>
+            <div class="tamanhos-checkbox">
+              <label><input type="checkbox" value="30" class="tamanho-chk"> 30</label>
+              <label><input type="checkbox" value="35" class="tamanho-chk"> 35</label>
+              <label><input type="checkbox" value="36" class="tamanho-chk"> 36</label>
+              <label><input type="checkbox" value="37" class="tamanho-chk"> 37</label>
+              <label><input type="checkbox" value="38" class="tamanho-chk"> 38</label>
+              <label><input type="checkbox" value="39" class="tamanho-chk"> 39</label>
+              <label><input type="checkbox" value="40" class="tamanho-chk"> 40</label>
+              <label><input type="checkbox" value="41" class="tamanho-chk"> 41</label>
+              <label><input type="checkbox" value="42" class="tamanho-chk"> 42</label>
+              <label><input type="checkbox" value="43" class="tamanho-chk"> 43</label>
+            </div>
+          </div>
+
+          <div class="form-grupo">
+            <label>Imagens (URLs separadas por vírgula) *</label>
+            <textarea id="imagens" required placeholder="imagens/foto1.jpg, imagens/foto2.jpg"></textarea>
+            <small>Adicione os caminhos das imagens separados por vírgula</small>
+          </div>
+
+          <div class="form-acoes">
+            <button type="submit" class="btn-primario">Salvar Produto</button>
+            <button type="button" id="btnCancelar" class="btn-secundario">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Lista de Produtos -->
+      <div class="lista-produtos">
+        <div class="table-wrapper">
+          <table id="tabelaProdutos">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Marca</th>
+                <th>Preço</th>
+                <th>Tamanhos</th>
+                <th>Imagens</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tabela-corpo">
+              <tr>
+                <td colspan="6" style="text-align: center; padding: 2rem;">
+                  Nenhum produto cadastrado. Clique em "+ Novo Produto" para começar.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: RELATÓRIO -->
+    <section id="tab-relatorio" class="tab-content">
+      <h2>Relatório de Produtos</h2>
+      <div class="relatorio-cards">
+        <div class="card-stat">
+          <div class="stat-valor" id="totalProdutos">0</div>
+          <div class="stat-label">Total de Produtos</div>
+        </div>
+        <div class="card-stat">
+          <div class="stat-valor" id="produtosSemPreco">0</div>
+          <div class="stat-label">Produtos sem Preço</div>
+        </div>
+        <div class="card-stat">
+          <div class="stat-valor" id="produtosComPreco">0</div>
+          <div class="stat-label">Produtos com Preço</div>
+        </div>
+        <div class="card-stat">
+          <div class="stat-valor" id="valorTotal">R$ 0,00</div>
+          <div class="stat-label">Valor Total em Estoque</div>
+        </div>
+      </div>
+
+      <div class="relatorio-lista">
+        <h3>Produtos por Marca</h3>
+        <div id="produtosPorMarca"></div>
+      </div>
+    </section>
+
+    <!-- TAB: BACKUP -->
+    <section id="tab-backup" class="tab-content">
+      <h2>Backup de Dados</h2>
+      <div class="backup-container">
+        <div class="backup-card">
+          <h3>📥 Importar Dados</h3>
+          <p>Restaure seus produtos a partir de um arquivo de backup</p>
+          <input type="file" id="fileImport" accept=".json" style="display: none;">
+          <button id="btnImportar" class="btn-primario">Escolher Arquivo</button>
+        </div>
+
+        <div class="backup-card">
+          <h3>📤 Exportar Dados</h3>
+          <p>Baixe seus produtos e configurações em um arquivo JSON</p>
+          <button id="btnExportar" class="btn-primario">Baixar Backup</button>
+        </div>
+      </div>
+
+      <div class="log-backup" id="logBackup"></div>
+    </section>
+  </main>
+</div>
+
+<!-- Modal de Autenticação -->
+<div id="modalAuth" class="modal-auth">
+  <div class="auth-box">
+    <h2>Acesso Administrativo</h2>
+    <p>Digite a senha para acessar o painel administrativo</p>
+    <input type="password" id="senhaAdmin" placeholder="Senha">
+    <button id="btnEntrar" class="btn-primario">Entrar</button>
+    <p id="mensagemErro" style="color: #e74c3c; display: none;"></p>
+  </div>
+</div>
+
+<script src="admin.js"></script>
+
+</body>
+</html>
