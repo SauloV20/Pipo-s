@@ -113,6 +113,7 @@ const catalogo = [
     nome: "Adidas NMD",
     preco: 499.90,
     imagens: ["imagens/adinmdbranco.jpg", "imagens/adinmdcinza.jpg", "imagens/adinmdbrancorosa.jpg", "imagens/adinmdpretorosa.jpg",],
+    marca: "Adidas",
     tamanhos: [35, 36, 37, 38, 39, 40],
     descricao: "Ultraboost com tecnologia Boost para máximo retorno de energia."
   },
@@ -464,7 +465,7 @@ function limparFiltros() {
 }
 
 // Carrinho
-const WHATSAPP_NUM = "55999999999999";
+const WHATSAPP_NUM = "5524992938796";
 let carrinho = [];
 
 function abrirCarrinho() {
@@ -582,17 +583,3 @@ document.addEventListener("DOMContentLoaded", () => {
   atualizarCarrinhoUI();
 });
 
-// Typebot
-const typebotInitScript = document.createElement("script");
-typebotInitScript.type = "module";
-typebotInitScript.innerHTML = `import Typebot from 'https://cdn.jsdelivr.net/npm/@typebot.io/js@0/dist/web.js'
-
-Typebot.initBubble({
-  typebot: "my-typebot-q8gzrsc",
-  theme: {
-    button: { backgroundColor: "#f3e0c7" },
-    chatWindow: { backgroundColor: "#F8F8F8" },
-  },
-});
-`;
-document.body.append(typebotInitScript);

@@ -10,7 +10,8 @@ function montarResumoCatalogo() {
   return produtos
     .map(p => {
       const preco = p.preco > 0 ? `R$ ${p.preco.toFixed(2)}` : 'sob consulta';
-      return `- ${p.nome} (${p.marca}) | preço: ${preco} | tamanhos: ${p.tamanhos.join(', ')}`;
+      const marca = p.marca || 'marca não informada';
+      return `- ${p.nome} (${marca}) | preço: ${preco} | tamanhos: ${p.tamanhos.join(', ')}`;
     })
     .join('\n');
 }
