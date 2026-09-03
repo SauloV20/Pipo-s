@@ -1,0 +1,450 @@
+[
+  {
+    "nome": "Nike Air Force",
+    "preco": 399.9,
+    "marca": "Nike",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "O Nike Air Force 1 é um clássico atemporal que une estilo e conforto. Possui tecnologia Air no solado para melhor amortecimento, material resistente e design versátil que combina com qualquer look"
+  },
+  {
+    "nome": "Nike AIR Jordan",
+    "preco": 0.0,
+    "marca": "Nike",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "O Air Jordan 1 é um dos tênis mais icônicos da cultura sneaker, combinando estilo marcante e conforto no dia a dia. Com design clássico, materiais de alta qualidade e excelente amortecimento, ele é perfeito para quem busca presença e autenticidade"
+  },
+  {
+    "nome": "Nike AIR Zoom",
+    "preco": 0.0,
+    "marca": "Nike",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "O Air Jordan 1 é um dos tênis mais icônicos da cultura sneaker, combinando estilo marcante e conforto no dia a dia. Com design clássico, materiais de alta qualidade e excelente amortecimento, ele é perfeito para quem busca presença e autenticidade"
+  },
+  {
+    "nome": "Nike Dunk",
+    "preco": 0.0,
+    "marca": "Nike",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "O Air Jordan 1 é um dos tênis mais icônicos da cultura sneaker, combinando estilo marcante e conforto no dia a dia. Com design clássico, materiais de alta qualidade e excelente amortecimento, ele é perfeito para quem busca presença e autenticidade"
+  },
+  {
+    "nome": "Nike NK",
+    "preco": 0.0,
+    "marca": "Nike",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "O Air Jordan 1 é um dos tênis mais icônicos da cultura sneaker, combinando estilo marcante e conforto no dia a dia. Com design clássico, materiais de alta qualidade e excelente amortecimento, ele é perfeito para quem busca presença e autenticidade"
+  },
+  {
+    "nome": "Nike Zoom",
+    "preco": 0.0,
+    "marca": "Nike",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "O Air Jordan 1 é um dos tênis mais icônicos da cultura sneaker, combinando estilo marcante e conforto no dia a dia. Com design clássico, materiais de alta qualidade e excelente amortecimento, ele é perfeito para quem busca presença e autenticidade"
+  },
+  {
+    "nome": "Nike Zoom Invicible",
+    "preco": 0.0,
+    "marca": "Nike",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "O Air Jordan 1 é um dos tênis mais icônicos da cultura sneaker, combinando estilo marcante e conforto no dia a dia. Com design clássico, materiais de alta qualidade e excelente amortecimento, ele é perfeito para quem busca presença e autenticidade"
+  },
+  {
+    "nome": "Adidas Adizero",
+    "preco": 499.9,
+    "marca": "Adidas",
+    "tamanhos": [
+      35,
+      36,
+      37,
+      38,
+      39,
+      40
+    ],
+    "descricao": "Ultraboost com tecnologia Boost para máximo retorno de energia."
+  },
+  {
+    "nome": "Adidas Campus",
+    "preco": 499.9,
+    "marca": "Adidas",
+    "tamanhos": [
+      35,
+      36,
+      37,
+      38,
+      39,
+      40
+    ],
+    "descricao": "Ultraboost com tecnologia Boost para máximo retorno de energia."
+  },
+  {
+    "nome": "Adidas Dymond",
+    "preco": 499.9,
+    "marca": "Adidas",
+    "tamanhos": [
+      35,
+      36,
+      37,
+      38,
+      39,
+      40
+    ],
+    "descricao": "Ultraboost com tecnologia Boost para máximo retorno de energia."
+  },
+  {
+    "nome": "Adidas FIT",
+    "preco": 499.9,
+    "marca": "Adidas",
+    "tamanhos": [
+      35,
+      36,
+      37,
+      38,
+      39,
+      40
+    ],
+    "descricao": "Ultraboost com tecnologia Boost para máximo retorno de energia."
+  },
+  {
+    "nome": "Adidas Knit",
+    "preco": 499.9,
+    "marca": "Adidas",
+    "tamanhos": [
+      35,
+      36,
+      37,
+      38,
+      39,
+      40
+    ],
+    "descricao": "Ultraboost com tecnologia Boost para máximo retorno de energia."
+  },
+  {
+    "nome": "Adidas Lurex",
+    "preco": 499.9,
+    "marca": "Adidas",
+    "tamanhos": [
+      35,
+      36,
+      37,
+      38,
+      39,
+      40
+    ],
+    "descricao": "Ultraboost com tecnologia Boost para máximo retorno de energia."
+  },
+  {
+    "nome": "Adidas NMD",
+    "preco": 499.9,
+    "marca": "Adidas",
+    "tamanhos": [
+      35,
+      36,
+      37,
+      38,
+      39,
+      40
+    ],
+    "descricao": "Ultraboost com tecnologia Boost para máximo retorno de energia."
+  },
+  {
+    "nome": "Adidas Samba",
+    "preco": 499.9,
+    "marca": "Adidas",
+    "tamanhos": [
+      35,
+      36,
+      37,
+      38,
+      39,
+      40
+    ],
+    "descricao": "Ultraboost com tecnologia Boost para máximo retorno de energia."
+  },
+  {
+    "nome": "Adidas Court",
+    "preco": 499.9,
+    "marca": "Adidas",
+    "tamanhos": [
+      35,
+      36,
+      37,
+      38,
+      39,
+      40
+    ],
+    "descricao": "Ultraboost com tecnologia Boost para máximo retorno de energia."
+  },
+  {
+    "nome": "Asics Japan S",
+    "preco": 499.9,
+    "marca": "Asics",
+    "tamanhos": [
+      35,
+      36,
+      37,
+      38,
+      39,
+      40
+    ],
+    "descricao": "Ultraboost com tecnologia Boost para máximo retorno de energia."
+  },
+  {
+    "nome": "DC Manteca",
+    "preco": 299.9,
+    "marca": "DC",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "Tênis DC clássico todo preto, estilo skate."
+  },
+  {
+    "nome": "DC Old School",
+    "preco": 299.9,
+    "marca": "DC",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "Tênis DC clássico todo preto, estilo skate."
+  },
+  {
+    "nome": "DC Old Court",
+    "preco": 299.9,
+    "marca": "DC",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "Tênis DC clássico todo preto, estilo skate."
+  },
+  {
+    "nome": "OUS Imigrante",
+    "preco": 299.9,
+    "marca": "OUS",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "Tênis OUS clássico, várias cores, estilo skate."
+  },
+  {
+    "nome": "OUS 2K",
+    "preco": 299.9,
+    "marca": "OUS",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "Tênis OUS clássico, várias cores, estilo skate."
+  },
+  {
+    "nome": "OUS Fluente",
+    "preco": 299.9,
+    "marca": "OUS",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "Tênis OUS clássico, várias cores, estilo skate."
+  },
+  {
+    "nome": "On Cloudtilt",
+    "preco": 299.9,
+    "marca": "On Cloud",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "Tênis OUS clássico, várias cores, estilo skate."
+  },
+  {
+    "nome": "Mizuno Wave",
+    "preco": 0.0,
+    "marca": "Mizuno",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "Chinelo Kenner confortável e durável."
+  },
+  {
+    "nome": "New Balance 1080",
+    "preco": 0.0,
+    "marca": "New Balance",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "Chinelo Kenner confortável e durável."
+  },
+  {
+    "nome": "New Balance Fresh",
+    "preco": 0.0,
+    "marca": "New Balance",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "Chinelo Kenner confortável e durável."
+  },
+  {
+    "nome": "Puma 180",
+    "preco": 0.0,
+    "marca": "Puma",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "Chinelo Kenner confortável e durável."
+  },
+  {
+    "nome": "Puma Park",
+    "preco": 0.0,
+    "marca": "Puma",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "Chinelo Kenner confortável e durável."
+  },
+  {
+    "nome": "Schutz Florence",
+    "preco": 0.0,
+    "marca": "Schutz",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "Chinelo Kenner confortável e durável."
+  },
+  {
+    "nome": "Vert Recife",
+    "preco": 0.0,
+    "marca": "Vert",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "Chinelo Kenner confortável e durável."
+  },
+  {
+    "nome": "Kenner",
+    "preco": 0.0,
+    "marca": "Kenner",
+    "tamanhos": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "descricao": "Chinelo Kenner confortável e durável."
+  }
+]

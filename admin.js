@@ -114,7 +114,7 @@ if (!isAuthenticated) {
       descricao: document.getElementById('descricao').value,
       tamanhos: tamanhosSelecionados,
       imagens: document.getElementById('imagens').value
-        .split(','
+        .split(',')
         .map(img => img.trim())
         .filter(img => img)
     };
