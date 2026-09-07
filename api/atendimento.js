@@ -33,6 +33,16 @@ Catálogo atual:
 ${montarResumoCatalogo()}`;
 
 module.exports = async function handler(req, res) {
+  // CORS: o site fica no GitHub Pages e a API fica na Vercel, domínios diferentes
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
   if (req.method !== 'POST') {
     res.status(405).json({ erro: 'Método não permitido' });
     return;
@@ -46,33 +56,45 @@ module.exports = async function handler(req, res) {
       return;
     }
 
-    const resposta = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 400,
-        system: SYSTEM_PROMPT,
-        messages: mensagens
-      })
-    });
+    // Gemini usa "user" e "model" (não "assistant"), e o texto vai dentro de "parts"
+    const contents = mensagens.map(m => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }]
+    }));
+
+    const modelo = 'gemini-2.5-flash'; // modelo gratuito no Google AI Studio
+    const resposta = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': process.env.GEMINI_API_KEY
+        },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+          contents
+        })
+      }
+    );
 
     if (!resposta.ok) {
       const erroTexto = await resposta.text();
-      console.error('Erro da API Anthropic:', erroTexto);
+      console.error('Erro da API Gemini:', erroTexto);
       res.status(502).json({ erro: 'Falha ao falar com a IA.' });
       return;
     }
 
     const dados = await resposta.json();
-    const texto = dados.content
-      .filter(bloco => bloco.type === 'text')
-      .map(bloco => bloco.text)
-      .join('\n');
+    const texto = (dados.candidates?.[0]?.content?.parts || [])
+      .map(parte => parte.text || '')
+      .join('\n')
+      .trim();
+
+    if (!texto) {
+      res.status(502).json({ erro: 'A IA não devolveu uma resposta.' });
+      return;
+    }
 
     res.status(200).json({ resposta: texto });
   } catch (erro) {
