@@ -33,16 +33,6 @@ Catálogo atual:
 ${montarResumoCatalogo()}`;
 
 module.exports = async function handler(req, res) {
-  // CORS: o site fica no GitHub Pages e a API fica na Vercel, domínios diferentes
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
-
   if (req.method !== 'POST') {
     res.status(405).json({ erro: 'Método não permitido' });
     return;
