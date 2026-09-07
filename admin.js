@@ -1,287 +1,348 @@
-// Senha padrão - MUDE ISSO EM PRODUÇÃO!
-const SENHA_ADMIN = '1234';
-let isAuthenticated = localStorage.getItem('pipos_admin_auth') === 'true';
+// admin.js — painel autenticado via API (Postgres no backend)
+// Troque a URL abaixo pela URL do seu projeto publicado na Vercel.
+const API_BASE = 'https://SEU-PROJETO.vercel.app';
+
+let token = localStorage.getItem('pipos_admin_token');
 let produtoAtualizar = null;
+let produtos = [];
+let eventosIniciados = false;
 
-// AUTENTICAÇÃO
-if (!isAuthenticated) {
-  document.body.innerHTML = '<div id="modalAuth" class="modal-auth" style="display: flex;"><div class="auth-box"><h2>Acesso Administrativo</h2><p>Digite a senha para acessar o painel administrativo</p><input type="password" id="senhaAdmin" placeholder="Senha"><button id="btnEntrar" class="btn-primario">Entrar</button><p id="mensagemErro" style="color: #e74c3c; display: none;"></p></div></div>';
-  
-  document.getElementById('btnEntrar').addEventListener('click', () => {
-    const senha = document.getElementById('senhaAdmin').value;
-    const mensagem = document.getElementById('mensagemErro');
-    
-    if (senha === SENHA_ADMIN) {
-      localStorage.setItem('pipos_admin_auth', 'true');
-      window.location.reload();
-    } else {
-      mensagem.textContent = 'Senha incorreta!';
-      mensagem.style.display = 'block';
-    }
-  });
-  
-  document.getElementById('senhaAdmin').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      document.getElementById('btnEntrar').click();
-    }
-  });
-} else {
-  // CARREGAR DADOS SALVOS
-  let produtos = JSON.parse(localStorage.getItem('pipos_produtos')) || [];
+function mostrarPainel() {
+  const modalAuth = document.getElementById('modalAuth');
+  if (modalAuth) modalAuth.style.display = 'none';
 
-  // EVENT LISTENERS
-  document.addEventListener('DOMContentLoaded', () => {
+  if (!eventosIniciados) {
     inicializarEventos();
-    exibirProdutos();
+    eventosIniciados = true;
+  }
+  carregarProdutos();
+}
+
+function mostrarLogin(mensagemErro) {
+  const modalAuth = document.getElementById('modalAuth');
+  if (modalAuth) modalAuth.style.display = 'flex';
+
+  if (mensagemErro) {
+    const el = document.getElementById('mensagemErro');
+    el.textContent = mensagemErro;
+    el.style.display = 'block';
+  }
+}
+
+async function tentarLogin() {
+  const usuario = document.getElementById('usuarioAdmin').value.trim();
+  const senha = document.getElementById('senhaAdmin').value;
+
+  try {
+    const resposta = await fetch(`${API_BASE}/api/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ usuario, senha })
+    });
+    const dados = await resposta.json();
+
+    if (!resposta.ok) {
+      mostrarLogin(dados.erro || 'Usuário ou senha inválidos');
+      return;
+    }
+
+    token = dados.token;
+    localStorage.setItem('pipos_admin_token', token);
+    mostrarPainel();
+  } catch (erro) {
+    mostrarLogin('Não consegui conectar ao servidor. Verifique sua conexão.');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('btnEntrar').addEventListener('click', tentarLogin);
+  document.getElementById('senhaAdmin').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') tentarLogin();
+  });
+  document.getElementById('usuarioAdmin').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') tentarLogin();
   });
 
-  function inicializarEventos() {
-    // Navegação de abas
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const tab = btn.dataset.tab;
-        mudarAba(tab);
-      });
-    });
-
-    // Logout
-    document.getElementById('btnLogout').addEventListener('click', () => {
-      localStorage.removeItem('pipos_admin_auth');
-      window.location.reload();
-    });
-
-    // Formulário de produto
-    document.getElementById('btnNovoProduto').addEventListener('click', abrirFormulario);
-    document.getElementById('btnCancelar').addEventListener('click', fecharFormulario);
-    document.getElementById('produto-form').addEventListener('submit', salvarProduto);
-
-    // Backup
-    document.getElementById('btnExportar').addEventListener('click', exportarDados);
-    document.getElementById('btnImportar').addEventListener('click', () => {
-      document.getElementById('fileImport').click();
-    });
-    document.getElementById('fileImport').addEventListener('change', importarDados);
-
-    atualizarRelatorio();
+  if (token) {
+    mostrarPainel();
   }
+});
 
-  function mudarAba(tab) {
-    // Remover class ativo de todas as abas
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('ativo'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('ativo'));
+function inicializarEventos() {
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => mudarAba(btn.dataset.tab));
+  });
 
-    // Adicionar class ativo na aba selecionada
-    document.getElementById(`tab-${tab}`).classList.add('ativo');
-    document.querySelector(`.nav-btn[data-tab="${tab}"]`).classList.add('ativo');
+  document.getElementById('btnLogout').addEventListener('click', () => {
+    localStorage.removeItem('pipos_admin_token');
+    token = null;
+    window.location.reload();
+  });
 
-    // Atualizar relatório ao mudar para essa aba
-    if (tab === 'relatorio') {
-      atualizarRelatorio();
-    }
-  }
+  document.getElementById('btnNovoProduto').addEventListener('click', abrirFormulario);
+  document.getElementById('btnCancelar').addEventListener('click', fecharFormulario);
+  document.getElementById('produto-form').addEventListener('submit', salvarProduto);
 
-  function abrirFormulario() {
-    produtoAtualizar = null;
-    document.getElementById('formProduto').style.display = 'block';
-    document.getElementById('produto-form').reset();
-    document.getElementById('tituloFormulario').textContent = 'Novo Produto';
-    document.getElementById('btnNovoProduto').style.display = 'none';
-  }
+  document.getElementById('btnExportar').addEventListener('click', exportarDados);
+  document.getElementById('btnImportar').addEventListener('click', () => {
+    document.getElementById('fileImport').click();
+  });
+  document.getElementById('fileImport').addEventListener('change', importarDados);
+}
 
-  function fecharFormulario() {
-    document.getElementById('formProduto').style.display = 'none';
-    document.getElementById('btnNovoProduto').style.display = 'block';
-    document.getElementById('produto-form').reset();
-  }
+function mudarAba(tab) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('ativo'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('ativo'));
 
-  function salvarProduto(e) {
-    e.preventDefault();
+  document.getElementById(`tab-${tab}`).classList.add('ativo');
+  document.querySelector(`.nav-btn[data-tab="${tab}"]`).classList.add('ativo');
 
-    const tamanhosSelecionados = Array.from(
-      document.querySelectorAll('.tamanho-chk:checked')
-    ).map(cb => parseInt(cb.value));
+  if (tab === 'relatorio') atualizarRelatorio();
+}
 
-    if (tamanhosSelecionados.length === 0) {
-      alert('Selecione pelo menos um tamanho!');
-      return;
-    }
-
-    const produto = {
-      id: produtoAtualizar?.id || Date.now(),
-      nome: document.getElementById('nome').value,
-      marca: document.getElementById('marca').value,
-      preco: parseFloat(document.getElementById('preco').value),
-      descricao: document.getElementById('descricao').value,
-      tamanhos: tamanhosSelecionados,
-      imagens: document.getElementById('imagens').value
-        .split(',')
-        .map(img => img.trim())
-        .filter(img => img)
-    };
-
-    if (produto.imagens.length === 0) {
-      alert('Adicione pelo menos uma imagem!');
-      return;
-    }
-
-    if (produtoAtualizar) {
-      // Atualizar produto existente
-      const index = produtos.findIndex(p => p.id === produtoAtualizar.id);
-      produtos[index] = produto;
-      adicionarLog('Produto atualizado com sucesso!', 'sucesso');
-    } else {
-      // Adicionar novo produto
-      produtos.push(produto);
-      adicionarLog('Produto adicionado com sucesso!', 'sucesso');
-    }
-
-    localStorage.setItem('pipos_produtos', JSON.stringify(produtos));
+async function carregarProdutos() {
+  try {
+    const resposta = await fetch(`${API_BASE}/api/produtos`);
+    produtos = await resposta.json();
     exibirProdutos();
+  } catch (erro) {
+    adicionarLog('Erro ao carregar produtos do banco.', 'erro');
+  }
+}
+
+function abrirFormulario() {
+  produtoAtualizar = null;
+  document.getElementById('formProduto').style.display = 'block';
+  document.getElementById('produto-form').reset();
+  document.getElementById('tituloFormulario').textContent = 'Novo Produto';
+  document.getElementById('btnNovoProduto').style.display = 'none';
+}
+
+function fecharFormulario() {
+  document.getElementById('formProduto').style.display = 'none';
+  document.getElementById('btnNovoProduto').style.display = 'block';
+  document.getElementById('produto-form').reset();
+}
+
+async function salvarProduto(e) {
+  e.preventDefault();
+
+  const tamanhosSelecionados = Array.from(
+    document.querySelectorAll('.tamanho-chk:checked')
+  ).map(cb => parseInt(cb.value));
+
+  if (tamanhosSelecionados.length === 0) {
+    alert('Selecione pelo menos um tamanho!');
+    return;
+  }
+
+  const imagens = document.getElementById('imagens').value
+    .split(',')
+    .map(img => img.trim())
+    .filter(img => img);
+
+  if (imagens.length === 0) {
+    alert('Adicione pelo menos uma imagem!');
+    return;
+  }
+
+  const produto = {
+    nome: document.getElementById('nome').value,
+    marca: document.getElementById('marca').value,
+    preco: parseFloat(document.getElementById('preco').value),
+    descricao: document.getElementById('descricao').value,
+    tamanhos: tamanhosSelecionados,
+    imagens
+  };
+
+  try {
+    let resposta;
+    if (produtoAtualizar) {
+      resposta = await fetch(`${API_BASE}/api/produtos/${produtoAtualizar.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(produto)
+      });
+    } else {
+      resposta = await fetch(`${API_BASE}/api/produtos`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(produto)
+      });
+    }
+
+    if (!resposta.ok) {
+      const erroDados = await resposta.json();
+      adicionarLog(erroDados.erro || 'Erro ao salvar produto.', 'erro');
+      return;
+    }
+
+    adicionarLog(produtoAtualizar ? 'Produto atualizado com sucesso!' : 'Produto adicionado com sucesso!', 'sucesso');
+    await carregarProdutos();
     fecharFormulario();
     mudarAba('produtos');
+  } catch (erro) {
+    adicionarLog('Erro de conexão ao salvar produto.', 'erro');
+  }
+}
+
+function exibirProdutos() {
+  const tabela = document.getElementById('tabela-corpo');
+
+  if (produtos.length === 0) {
+    tabela.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align: center; padding: 2rem;">
+          Nenhum produto cadastrado. Clique em "+ Novo Produto" para começar.
+        </td>
+      </tr>
+    `;
+    return;
   }
 
-  function exibirProdutos() {
-    const tabela = document.getElementById('tabela-corpo');
+  tabela.innerHTML = produtos.map(produto => `
+    <tr>
+      <td><strong>${produto.nome}</strong></td>
+      <td>${produto.marca}</td>
+      <td>${Number(produto.preco) > 0 ? `R$ ${Number(produto.preco).toFixed(2)}` : 'Consulte'}</td>
+      <td>${produto.tamanhos.join(', ')}</td>
+      <td>${produto.imagens.length} imagem(ns)</td>
+      <td>
+        <button class="btn-editar" onclick="editarProduto(${produto.id})">Editar</button>
+        <button class="btn-deletar" onclick="deletarProduto(${produto.id})">Deletar</button>
+      </td>
+    </tr>
+  `).join('');
+}
 
-    if (produtos.length === 0) {
-      tabela.innerHTML = `
-        <tr>
-          <td colspan="6" style="text-align: center; padding: 2rem;">
-            Nenhum produto cadastrado. Clique em "+ Novo Produto" para começar.
-          </td>
-        </tr>
-      `;
+window.editarProduto = function (id) {
+  const produto = produtos.find(p => p.id === id);
+  if (!produto) return;
+
+  produtoAtualizar = produto;
+
+  document.getElementById('nome').value = produto.nome;
+  document.getElementById('marca').value = produto.marca;
+  document.getElementById('preco').value = produto.preco;
+  document.getElementById('descricao').value = produto.descricao;
+  document.getElementById('imagens').value = produto.imagens.join(', ');
+
+  document.querySelectorAll('.tamanho-chk').forEach(cb => {
+    cb.checked = produto.tamanhos.includes(parseInt(cb.value));
+  });
+
+  document.getElementById('tituloFormulario').textContent = 'Editar Produto';
+  document.getElementById('formProduto').style.display = 'block';
+  document.getElementById('btnNovoProduto').style.display = 'none';
+};
+
+window.deletarProduto = async function (id) {
+  if (!confirm('Tem certeza que deseja deletar este produto?')) return;
+
+  try {
+    const resposta = await fetch(`${API_BASE}/api/produtos/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    if (!resposta.ok) {
+      adicionarLog('Erro ao deletar produto.', 'erro');
       return;
     }
 
-    tabela.innerHTML = produtos.map(produto => `
-      <tr>
-        <td><strong>${produto.nome}</strong></td>
-        <td>${produto.marca}</td>
-        <td>${produto.preco > 0 ? `R$ ${produto.preco.toFixed(2)}` : 'Consulte'}</td>
-        <td>${produto.tamanhos.join(', ')}</td>
-        <td>${produto.imagens.length} imagem(ns)</td>
-        <td>
-          <button class="btn-editar" onclick="editarProduto(${produto.id})">Editar</button>
-          <button class="btn-deletar" onclick="deletarProduto(${produto.id})">Deletar</button>
-        </td>
-      </tr>
+    adicionarLog('Produto deletado com sucesso!', 'sucesso');
+    await carregarProdutos();
+  } catch (erro) {
+    adicionarLog('Erro de conexão ao deletar produto.', 'erro');
+  }
+};
+
+function atualizarRelatorio() {
+  const totalProdutos = produtos.length;
+  const produtosSemPreco = produtos.filter(p => Number(p.preco) === 0).length;
+  const produtosComPreco = totalProdutos - produtosSemPreco;
+  const valorTotal = produtos.reduce((acc, p) => acc + (Number(p.preco) > 0 ? Number(p.preco) : 0), 0);
+
+  document.getElementById('totalProdutos').textContent = totalProdutos;
+  document.getElementById('produtosSemPreco').textContent = produtosSemPreco;
+  document.getElementById('produtosComPreco').textContent = produtosComPreco;
+  document.getElementById('valorTotal').textContent = `R$ ${valorTotal.toFixed(2)}`;
+
+  const porMarca = {};
+  produtos.forEach(p => {
+    porMarca[p.marca] = (porMarca[p.marca] || 0) + 1;
+  });
+
+  const container = document.getElementById('produtosPorMarca');
+  container.innerHTML = Object.entries(porMarca)
+    .map(([marca, quantidade]) => `
+      <div class="marca-item">
+        <strong>${marca}</strong>
+        <span>${quantidade} produto(s)</span>
+      </div>
     `).join('');
-  }
+}
 
-  window.editarProduto = function(id) {
-    const produto = produtos.find(p => p.id === id);
-    if (!produto) return;
-
-    produtoAtualizar = produto;
-
-    document.getElementById('nome').value = produto.nome;
-    document.getElementById('marca').value = produto.marca;
-    document.getElementById('preco').value = produto.preco;
-    document.getElementById('descricao').value = produto.descricao;
-    document.getElementById('imagens').value = produto.imagens.join(', ');
-
-    // Marcar tamanhos selecionados
-    document.querySelectorAll('.tamanho-chk').forEach(cb => {
-      cb.checked = produto.tamanhos.includes(parseInt(cb.value));
-    });
-
-    document.getElementById('tituloFormulario').textContent = 'Editar Produto';
-    document.getElementById('formProduto').style.display = 'block';
-    document.getElementById('btnNovoProduto').style.display = 'none';
+function exportarDados() {
+  const dados = {
+    versao: '2.0',
+    data: new Date().toISOString(),
+    produtos
   };
 
-  window.deletarProduto = function(id) {
-    if (confirm('Tem certeza que deseja deletar este produto?')) {
-      produtos = produtos.filter(p => p.id !== id);
-      localStorage.setItem('pipos_produtos', JSON.stringify(produtos));
-      exibirProdutos();
-      adicionarLog('Produto deletado com sucesso!', 'sucesso');
-    }
-  };
+  const json = JSON.stringify(dados, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `backup_pipos_${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
 
-  function atualizarRelatorio() {
-    const totalProdutos = produtos.length;
-    const produtosSemPreco = produtos.filter(p => p.preco === 0).length;
-    const produtosComPreco = totalProdutos - produtosSemPreco;
-    const valorTotal = produtos.reduce((acc, p) => acc + (p.preco > 0 ? p.preco : 0), 0);
+  adicionarLog(`Backup exportado com ${produtos.length} produtos!`, 'sucesso');
+}
 
-    document.getElementById('totalProdutos').textContent = totalProdutos;
-    document.getElementById('produtosSemPreco').textContent = produtosSemPreco;
-    document.getElementById('produtosComPreco').textContent = produtosComPreco;
-    document.getElementById('valorTotal').textContent = `R$ ${valorTotal.toFixed(2)}`;
+async function importarDados(e) {
+  const file = e.target.files[0];
+  if (!file) return;
 
-    // Produtos por marca
-    const porMarca = {};
-    produtos.forEach(p => {
-      porMarca[p.marca] = (porMarca[p.marca] || 0) + 1;
-    });
+  const reader = new FileReader();
+  reader.onload = async (event) => {
+    try {
+      const dados = JSON.parse(event.target.result);
 
-    const container = document.getElementById('produtosPorMarca');
-    container.innerHTML = Object.entries(porMarca)
-      .map(([marca, quantidade]) => `
-        <div class="marca-item">
-          <strong>${marca}</strong>
-          <span>${quantidade} produto(s)</span>
-        </div>
-      `).join('');
-  }
-
-  function exportarDados() {
-    const dados = {
-      versao: '1.0',
-      data: new Date().toISOString(),
-      produtos: produtos
-    };
-
-    const json = JSON.stringify(dados, null, 2);
-    const blob = new Blob([json], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `backup_pipos_${new Date().toISOString().split('T')[0]}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-
-    adicionarLog(`Backup exportado com ${produtos.length} produtos!`, 'sucesso');
-  }
-
-  function importarDados(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const dados = JSON.parse(event.target.result);
-        
-        if (!Array.isArray(dados.produtos)) {
-          throw new Error('Formato de arquivo inválido!');
-        }
-
-        produtos = dados.produtos;
-        localStorage.setItem('pipos_produtos', JSON.stringify(produtos));
-        exibirProdutos();
-        atualizarRelatorio();
-        adicionarLog(`Backup importado com ${produtos.length} produtos!`, 'sucesso');
-      } catch (erro) {
-        adicionarLog(`Erro ao importar: ${erro.message}`, 'erro');
+      if (!Array.isArray(dados.produtos)) {
+        throw new Error('Formato de arquivo inválido!');
       }
-    };
-    reader.readAsText(file);
-  }
 
-  function adicionarLog(mensagem, tipo = 'info') {
-    const logContainer = document.getElementById('logBackup');
-    const entry = document.createElement('div');
-    entry.className = `log-entry ${tipo}`;
-    entry.textContent = `[${new Date().toLocaleTimeString()}] ${mensagem}`;
-    logContainer.insertBefore(entry, logContainer.firstChild);
+      let importados = 0;
+      for (const p of dados.produtos) {
+        const resposta = await fetch(`${API_BASE}/api/produtos`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify(p)
+        });
+        if (resposta.ok) importados++;
+      }
 
-    // Manter apenas os últimos 10 logs
-    while (logContainer.children.length > 10) {
-      logContainer.removeChild(logContainer.lastChild);
+      await carregarProdutos();
+      atualizarRelatorio();
+      adicionarLog(`Backup importado: ${importados} de ${dados.produtos.length} produtos.`, 'sucesso');
+    } catch (erro) {
+      adicionarLog(`Erro ao importar: ${erro.message}`, 'erro');
     }
+  };
+  reader.readAsText(file);
+}
+
+function adicionarLog(mensagem, tipo = 'info') {
+  const logContainer = document.getElementById('logBackup');
+  const entry = document.createElement('div');
+  entry.className = `log-entry ${tipo}`;
+  entry.textContent = `[${new Date().toLocaleTimeString()}] ${mensagem}`;
+  logContainer.insertBefore(entry, logContainer.firstChild);
+
+  while (logContainer.children.length > 10) {
+    logContainer.removeChild(logContainer.lastChild);
   }
 }
