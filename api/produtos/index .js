@@ -1,6 +1,6 @@
-// api/produtos.js
-const { getPool } = require('./_db');
-const { verificarToken } = require('./_auth');
+// api/produtos/index.js
+const { getPool } = require('../_db');
+const { verificarToken } = require('../_auth');
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
