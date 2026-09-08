@@ -1,6 +1,6 @@
 // admin.js — painel autenticado via API (Postgres no backend)
 // Troque a URL abaixo pela URL do seu projeto publicado na Vercel.
-const API_BASE = 'https://SEU-PROJETO.vercel.app';
+const API_BASE = 'https://pipo-s.vercel.app';
 
 let token = localStorage.getItem('pipos_admin_token');
 let produtoAtualizar = null;

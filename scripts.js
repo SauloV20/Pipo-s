@@ -1,5 +1,5 @@
 // Troque pela URL do seu projeto publicado na Vercel (mesma do admin e do chat)
-const API_BASE = 'https://SEU-PROJETO.vercel.app';
+const API_BASE = 'https://pipo-s.vercel.app';
 
 let catalogo = [];
 

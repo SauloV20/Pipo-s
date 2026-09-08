@@ -4,7 +4,7 @@
 // Requer o backend em /api/atendimento (veja api/atendimento.js).
 
 (function () {
-  const ENDPOINT = '/api/atendimento';
+  const ENDPOINT = 'https://pipo-s.vercel.app/api/atendimento';
 
   document.body.insertAdjacentHTML('beforeend', `
     <button id="chat-toggle" aria-label="Abrir chat de atendimento">
